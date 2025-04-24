@@ -43,7 +43,7 @@ Avant de commencer ce lab, assurez-vous d'avoir configuré votre environnement c
 
 ### **Étapes du Lab**
 
-#### **1\. Préparer l'environnement**  
+#### **1. Préparer l'environnement**  
  
 
 **Installer les dépendances** en utilisant npm :  
@@ -61,7 +61,7 @@ npm install
 
 * * *
 
-#### **2\. Créer le contrat solidity avec les Design Patterns**
+#### **2. Créer le contrat solidity avec les Design Patterns**
 
 1.  Créez un fichier contracts/InstantPaymentHub.sol dans le répertoire **contracts/**.
 2.  Implémentez un contrat de paiement instantané utilisant plusieurs **design patterns** :  
@@ -85,7 +85,7 @@ contract InstantPaymentHub is Ownable, Pausable, ReentrancyGuard {
 
     using Counters for Counters.Counter;
 
-    Counters.Counter private \_paymentCount;
+    Counters.Counter private _paymentCount;
 
     mapping(address => uint256) public balances;
 
@@ -95,7 +95,7 @@ contract InstantPaymentHub is Ownable, Pausable, ReentrancyGuard {
 
         require(!paused(), "Contract is paused");
 
-        \_;
+        _;
 
     }
 
@@ -111,7 +111,7 @@ contract InstantPaymentHub is Ownable, Pausable, ReentrancyGuard {
 
     function deposit() public payable whenNotPaused {
 
-        balances\[msg.sender\] += msg.value;
+        balances[msg.sender] += msg.value;
 
     }
 
@@ -119,11 +119,11 @@ contract InstantPaymentHub is Ownable, Pausable, ReentrancyGuard {
 
     function instantPayment(address recipient, uint256 amount) public whenNotPaused nonReentrant {
 
-        require(balances\[msg.sender\] >= amount, "Insufficient balance");
+        require(balances[msg.sender] >= amount, "Insufficient balance");
 
-        balances\[msg.sender\] -= amount;
+        balances[msg.sender] -= amount;
 
-        balances\[recipient\] += amount;
+        balances[recipient] += amount;
 
         emit PaymentMade(msg.sender, recipient, amount);
 
@@ -133,11 +133,11 @@ contract InstantPaymentHub is Ownable, Pausable, ReentrancyGuard {
 
     function withdraw(uint256 amount) public whenNotPaused nonReentrant {
 
-        require(balances\[msg.sender\] >= amount, "Insufficient balance");
+        require(balances[msg.sender] >= amount, "Insufficient balance");
 
         payable(msg.sender).transfer(amount);
 
-        balances\[msg.sender\] -= amount;
+        balances[msg.sender] -= amount;
 
     }
 
@@ -145,7 +145,7 @@ contract InstantPaymentHub is Ownable, Pausable, ReentrancyGuard {
 
     function pause() public onlyOwner {
 
-        \_pause();
+        _pause();
 
     }
 
@@ -153,7 +153,7 @@ contract InstantPaymentHub is Ownable, Pausable, ReentrancyGuard {
 
     function unpause() public onlyOwner {
 
-        \_unpause();
+        _unpause();
 
     }
 
@@ -181,7 +181,7 @@ contract InstantPaymentHub is Ownable, Pausable, ReentrancyGuard {
 
 * * *
 
-#### **3\. Déployer le contrat sur Sepolia**
+#### **3. Déployer le contrat sur Sepolia**
 
 1.  **Créer un script de déploiement** dans **scripts/deploy.js** :  
      
@@ -190,7 +190,7 @@ contract InstantPaymentHub is Ownable, Pausable, ReentrancyGuard {
 
 async function main() {
 
-    const \[deployer\] = await ethers.getSigners();
+    const [deployer] = await ethers.getSigners();
 
     console.log("Déployé par : ", deployer.address);
 
@@ -229,7 +229,7 @@ npx hardhat run scripts/deploy.js --network sepolia
 
 * * *
 
-#### **4\. Interagir avec le contrat via Hardhat**
+#### **4. Interagir avec le contrat via Hardhat**
 
 1.  **Créer un script d'interaction** dans **scripts/interact.js** pour tester le contrat **InstantPaymentHub** déployé :  
       
@@ -239,9 +239,9 @@ npx hardhat run scripts/deploy.js --network sepolia
 
 async function main() {
 
-    const \[deployer\] = await ethers.getSigners();
+    const [deployer] = await ethers.getSigners();
 
-    const contractAddress = "VOTRE\_ADRESSE\_DE\_CONTRAT"; // Remplacez par l'adresse du contrat déployé
+    const contractAddress = "VOTRE_ADRESSE_DE_CONTRAT"; // Remplacez par l'adresse du contrat déployé
 
     const contract = await ethers.getContractAt("InstantPaymentHub", contractAddress);
 
@@ -255,7 +255,7 @@ async function main() {
 
     // Effectuer un paiement instantané
 
-    const recipient = "ADRESSE\_D\_UN\_UTILISATEUR"; // Remplacez par l'adresse du destinataire
+    const recipient = "ADRESSE_D_UN_UTILISATEUR"; // Remplacez par l'adresse du destinataire
 
     const paymentTx = await contract.instantPayment(recipient, ethers.utils.parseEther("0.5"));
 
@@ -299,7 +299,7 @@ npx hardhat run scripts/interact.js --network sepolia
 
 * * *
 
-#### **5\. Vérification des résultats sur Sepolia via Etherscan**
+#### **5. Vérification des résultats sur Sepolia via Etherscan**
 
 *   Une fois que vous avez effectué des transactions, vous pouvez vérifier leur état sur Sepolia Etherscan
 *   Recherchez l'adresse du contrat déployé et consultez les transactions pour vérifier les paiements effectués.
@@ -362,3 +362,5 @@ lab-design-patterns-solidity/
 *   Savoir comment déployer un contrat avec ces patterns et interagir avec lui via Hardhat.
 
 Appliquer des bonnes pratiques de sécurité et d'extensibilité dans le développement de smart contracts.
+
+
